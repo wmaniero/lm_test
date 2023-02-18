@@ -4,7 +4,6 @@ import { IDefaultColors } from './defaultColor';
 export interface IColors {
   button: IButtonColor;
   text: ITextColor;
-  progress: ProgressColor;
   disabled: string;
   background: string;
 }
@@ -43,10 +42,6 @@ interface ITextColor {
   placeholder: string;
 }
 
-type ProgressColor = {
-  background: string;
-  foreground: string;
-}
 export interface IFontWeights {
   normal: string;
   medium: string;

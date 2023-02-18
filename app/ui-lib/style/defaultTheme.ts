@@ -1,7 +1,23 @@
-import { ITheme } from './styledType';
-import colors from './defaultColor';
+import { Platform } from 'react-native';
+import { IDefaultColors } from 'ui-lib/style/defaultColor';
+import { ITheme } from 'ui-lib/style/styledType';
 
-const defaultTheme: ITheme = {
+const colors: IDefaultColors = {
+  white: '#FFFFFF',
+  primary: '#FEDF78',
+  danger: '#F26D63',
+  warning: '#FFA15E',
+  dark: '#152129',
+  darkMid: '#263D4C',
+  grey: '#485F72',
+  greyMid: '#7C91A2',
+  greyLight: '#CFDBE6',
+  greyUltraLight: '#E9EFF5',
+  greyExtraLight: '#F4F7FA',
+  transparent: 'transparent',
+};
+
+export const defaultTheme: ITheme = {
   colors: {
     button: {
       background: {
@@ -27,7 +43,7 @@ const defaultTheme: ITheme = {
     },
     text: {
       base: colors.darkMid,
-      baseLight: colors.greyMid,
+      baseLight: colors.grey,
       subtitle: colors.greyMid,
       subtitleLight: colors.white,
       paragraph: colors.greyMid,
@@ -35,21 +51,16 @@ const defaultTheme: ITheme = {
       disabled: colors.greyMid,
       placeholder: colors.greyMid,
     },
-    progress: {
-      background: colors.greyExtraLight,
-      foreground: colors.primary,
-    },
     disabled: colors.greyLight,
     background: colors.greyExtraLight,
     ...colors,
   },
   font: {
     baseSize: 8,
-    fontFamily: 'oswald',
-    fontWeights: {
-      normal: '400',
-      medium: '500',
-      bold: '700',
+    fontFamily: {
+      normal: Platform.OS === 'android' ? 'oswald_regular' : 'Oswald-Regular',
+      medium: Platform.OS === 'android' ? 'oswald_medium' : 'Oswald-Medium',
+      bold: Platform.OS === 'android' ? 'oswald_bold' : 'Oswald-Bold',
     },
     fontScale: {
       h1: 6,
@@ -79,6 +90,7 @@ const defaultTheme: ITheme = {
           medium: 16,
           big: 16,
           extraLarge: 16,
+          extraExtraLarge: 16,
         },
       },
     },

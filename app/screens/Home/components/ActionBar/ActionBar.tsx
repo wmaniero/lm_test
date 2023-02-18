@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import {
   View,
-  Text,
   TouchableOpacity,
 } from 'react-native';
 import styled from 'ui-lib/style/styledComponents';
+import { Paragraph } from 'ui-lib';
 import { LayoutView } from 'components/LayoutView';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -25,10 +25,10 @@ const ActionsWrapper = styled(View)`
   elevation: 1;
 `;
 
-const ActionText = styled(Text)`
-  fontFamily: oswald;
+const ActionText = styled(Paragraph).attrs({
+  color: 'darkMid',
+})`
   fontWeight: bold;
-  fontSize: 16;
 `;
 
 type ActionButtonProps = {

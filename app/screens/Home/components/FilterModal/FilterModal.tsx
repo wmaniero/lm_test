@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, InteractionManager } from 'react-native';
+import { ScrollView, InteractionManager } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Modal } from 'ui-lib';
+import { Slider } from '@miblanchard/react-native-slider';
 
 export const FilterModal = () => {
   const navigation = useNavigation();
@@ -29,9 +30,12 @@ export const FilterModal = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={400}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 50 }}
       >
-        <Text>xxxx</Text>
+        <Slider
+          value={50}
+          onValueChange={value => console.log(value)}
+        />
       </ScrollView>
     </Modal>
   );

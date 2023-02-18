@@ -5,7 +5,7 @@ import { ContainerContext, container } from 'core/ioc/ContainerContext';
 import { store } from 'store';
 import './services/api';
 import { ThemeProvider } from 'ui-lib';
-import { defaultTheme } from 'config/styles/defaultTheme';
+import defaultTheme from 'ui-lib/style/defaultTheme';
 import { NavigationContainer } from '@react-navigation/native';
 import { RootStackScreen } from './Navigator';
 
