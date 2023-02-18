@@ -58,7 +58,7 @@ export const defaultTheme: ITheme = {
   font: {
     baseSize: 8,
     fontFamily: {
-      normal: Platform.OS === 'android' ? 'oswald_regular' : 'Oswald-Regular',
+      normal: Platform.OS === 'android' ? 'oswald' : 'Oswald',
       medium: Platform.OS === 'android' ? 'oswald_medium' : 'Oswald-Medium',
       bold: Platform.OS === 'android' ? 'oswald_bold' : 'Oswald-Bold',
     },

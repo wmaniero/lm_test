@@ -15,7 +15,7 @@ type Props = {
 
 const ActionsWrapper = styled(View)`
   height: 50;
-  backgroundColor: #FEDF78;
+  backgroundColor: ${({ theme }) => theme.colors.primary};
   flexDirection: row;
   shadowColor: black;
   shadowOffset: 0px 10px;
