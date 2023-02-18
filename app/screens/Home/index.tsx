@@ -2,6 +2,7 @@ import React, {
   useState,
   useEffect,
   useMemo,
+  useCallback,
 } from 'react';
 import {
   View,
@@ -17,6 +18,7 @@ import { Hotel } from 'types/Hotel';
 import { getHotels } from './actions/getHotels';
 import { ActionBar } from './components/ActionBar';
 import { HotelRow } from './components/HotelRow';
+import { SortingMethodValues } from './components/SorterModal';
 
 const Container = styled(View)`
   flex: 1;
@@ -46,8 +48,58 @@ export const Home = () => {
     navigation.navigate('SorterModal');
   };
 
+  const getHotelData = useCallback(() => {
+    if (selectedSortBy === SortingMethodValues.STARS_DESC) {
+      return hotels.sort((a: Hotel, b: Hotel) => {
+        if (a.stars < b.stars) {
+          return 1;
+        }
+        if (a.stars >= b.stars) {
+          return -1;
+        }
+        return 0;
+      });
+    }
+
+    if (selectedSortBy === SortingMethodValues.STARS_ASC) {
+      return hotels.sort((a: Hotel, b: Hotel) => {
+        if (a.stars < b.stars) {
+          return -1;
+        }
+        if (a.stars >= b.stars) {
+          return 1;
+        }
+        return 0;
+      });
+    }
+
+    if (selectedSortBy === SortingMethodValues.PRICE_DESC) {
+      return hotels.sort((a: Hotel, b: Hotel) => {
+        if (a.price < b.price) {
+          return 1;
+        }
+        if (a.price >= b.price) {
+          return -1;
+        }
+        return 0;
+      });
+    }
+
+    if (selectedSortBy === SortingMethodValues.PRICE_ASC) {
+      return hotels.sort((a: Hotel, b: Hotel) => {
+        if (a.price < b.price) {
+          return -1;
+        }
+        if (a.price >= b.price) {
+          return 1;
+        }
+        return 0;
+      });
+    }
+    return hotels;
+  }, [selectedSortBy, hotels]);
+
   const content = useMemo(() => {
-    console.log(`selectedSortBy: ${selectedSortBy}`);
     if (!hotels?.length) {
       return null;
     }
@@ -67,7 +119,7 @@ export const Home = () => {
           padding: SCENE_PADDING,
         }}
       >
-        {hotels.map((hotel: Hotel) => (
+        {getHotelData().map((hotel: Hotel) => (
           <HotelRow
             key={hotel.id}
             item={hotel}
@@ -76,7 +128,7 @@ export const Home = () => {
         ))}
       </ScrollView>
     );
-  }, [hotels, navigation, selectedSortBy]);
+  }, [getHotelData, hotels?.length, navigation]);
 
   return (
     <SafeAreaView
