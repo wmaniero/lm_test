@@ -8,7 +8,6 @@ type Kind = 'primary';
 type Props = {
   onPress: () => void;
   kind?: Kind;
-  testID?: string;
   children: React.ReactText;
 };
 
@@ -31,7 +30,6 @@ const Label = styled(ParagraphSmall).attrs({ weight: 'bold' })<{ kind: Kind }>`
 export const Button = ({
   onPress,
   kind = 'primary',
-  testID,
   children,
 }: Props) => {
   const throttledOnPress = useMemo(
@@ -40,7 +38,7 @@ export const Button = ({
   );
 
   return (
-    <ButtonContainer kind={kind} testID={testID} onPress={throttledOnPress}>
+    <ButtonContainer kind={kind} onPress={throttledOnPress}>
       <Label kind={kind}>
         {children}
       </Label>

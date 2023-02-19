@@ -21,7 +21,7 @@ export const defaultTheme: ITheme = {
   colors: {
     button: {
       background: {
-        primary: colors.primary,
+        primary: colors.darkMid,
         secondary: colors.greyMid,
         tertiary: colors.greyUltraLight,
         danger: colors.danger,

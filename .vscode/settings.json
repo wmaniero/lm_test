@@ -10,12 +10,6 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "eslint.enable": true,
   "workbench.colorCustomizations": {},
-  "cSpell.words": [
-    "iban"
-  ],
-  "cSpell.ignoreWords": [
-    "iiban"
-  ],
   "cSpell.enabledLanguageIds": [
     "asciidoc",
     "c",

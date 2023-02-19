@@ -2,6 +2,7 @@ import React, {
   useState,
   useEffect,
   useMemo,
+  useRef,
   useCallback,
 } from 'react';
 import {
@@ -18,6 +19,7 @@ import styled from 'ui-lib/style/styledComponents';
 import { SCENE_PADDING } from 'ui-lib/utils/deviceSpecs';
 import { Hotel } from 'types/Hotel';
 import { ITheme } from 'ui-lib/style/styledType';
+import { minBy, maxBy } from 'lodash';
 import { getHotels } from './actions/getHotels';
 import { ActionBar } from './components/ActionBar';
 import { HotelRow } from './components/HotelRow';
@@ -40,6 +42,8 @@ const Home = ({ theme }: Props) => {
   const navigation = useNavigation();
   const selectedSortBy = useSelector((store: StoreState) => store.homeReducer.sortBy);
   const [hotels, setHotels] = useState<Hotel[] | []>([]);
+  const minPrice = useRef(null);
+  const maxPrice = useRef(null);
 
   useEffect(() => {
     getHotels()
@@ -47,8 +51,20 @@ const Home = ({ theme }: Props) => {
       .catch(error => console.error('[getHotels] error', error));
   }, []);
 
+  useEffect(() => {
+    if (hotels?.length) {
+      const minPriceItem = minBy(hotels, it => it.price);
+      const maxPriceItem = maxBy(hotels, it => it.price);
+      minPrice.current = minPriceItem.price;
+      maxPrice.current = maxPriceItem.price;
+    }
+  }, [hotels]);
+
   const onFiltersPress = () => {
-    navigation.navigate('FilterModal');
+    navigation.navigate('FilterModal', {
+      minPrice: minPrice.current,
+      maxPrice: maxPrice.current,
+    });
   };
 
   const onSortersPress = () => {

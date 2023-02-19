@@ -50,7 +50,8 @@ export const HotelRow = ({ item, onPress }: Props) => (
       flexDirection: 'row',
       overflow: 'hidden',
       elevation: 1,
-    }}>
+    }}
+  >
     <Image source={{ uri: item.gallery?.[0] }} />
     <LayoutView flex={1} flexDirection="column">
       <LayoutView

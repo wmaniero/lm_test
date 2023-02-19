@@ -31,7 +31,6 @@ export type ButtonProp = TypographyProp & {
   margin?: number;
   disabled?: boolean;
   textColor?: string;
-  testID?: string;
   fullWidth?: boolean;
   type?: Variant;
   iconLeft?: ImageSourcePropType | React.ReactElement;
@@ -58,6 +57,5 @@ export interface IActionProp {
   theme?: ITheme;
   disabled?: boolean;
   onPress?: (ev: any) => void;
-  testID?: string;
   style?: ViewStyle;
 }
