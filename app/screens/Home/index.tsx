@@ -8,6 +8,7 @@ import React, {
 import {
   View,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
@@ -16,8 +17,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { compose } from 'recompose';
 import { withTheme } from 'styled-components';
 import styled from 'ui-lib/style/styledComponents';
+import { ActivityIndicator } from 'ui-lib/components/ActivityIndicator';
 import { SCENE_PADDING } from 'ui-lib/utils/deviceSpecs';
 import { Hotel } from 'types/Hotel';
+import { FilterItem } from 'types/FilterItem';
 import { ITheme } from 'ui-lib/style/styledType';
 import { minBy, maxBy } from 'lodash';
 import { getHotels } from './actions/getHotels';
@@ -34,6 +37,13 @@ const Content = styled(View)`
   flex: 1;
 `;
 
+const LoaderWrapper = styled(View)`
+  flex: 1;
+  alignContent: center;
+  alignItems: center;
+  justifyContent: center;
+`;
+
 type Props = {
   theme: ITheme;
 }
@@ -41,14 +51,24 @@ type Props = {
 const Home = ({ theme }: Props) => {
   const navigation = useNavigation();
   const selectedSortBy = useSelector((store: StoreState) => store.homeReducer.sortBy);
+  const selectedFilters = useSelector((store: StoreState) => store.homeReducer.filters);
+  const [loading, setLoading] = useState<boolean>(false);
   const [hotels, setHotels] = useState<Hotel[] | []>([]);
+  const [filteredHotels, setFilteredHotels] = useState<Hotel[] | []>([]);
   const minPrice = useRef(null);
   const maxPrice = useRef(null);
 
   useEffect(() => {
+    setLoading(true);
     getHotels()
-      .then(response => setHotels(response))
-      .catch(error => console.error('[getHotels] error', error));
+      .then((response) => {
+        setHotels(response);
+        setLoading(false);
+      })
+      .catch((error) => {
+        Alert.alert('An error occurred', 'Please try again later! error: ', error?.code);
+        setLoading(false);
+      });
   }, []);
 
   useEffect(() => {
@@ -59,6 +79,33 @@ const Home = ({ theme }: Props) => {
       maxPrice.current = maxPriceItem.price;
     }
   }, [hotels]);
+
+  const getFilteredHotelData = useCallback((budgetFilters) => {
+    let nextData = [];
+
+    budgetFilters.forEach((budgetFilter: FilterItem) => {
+      budgetFilter.conditions?.forEach((filterCondition) => {
+        nextData = hotels.filter((hotel: Hotel) => {
+          if (filterCondition.operator === 'LESS_OR_EQUAL'
+            && hotel?.[filterCondition.field] <= filterCondition.value
+          ) {
+            return true;
+          }
+          return false;
+        });
+      });
+    });
+    return nextData;
+  }, [hotels]);
+
+  useEffect(() => {
+    if (selectedFilters?.length) {
+      const budgetFilters = selectedFilters.filter((it: FilterItem) => it.type === 'budget');
+      if (budgetFilters?.length) {
+        setFilteredHotels(getFilteredHotelData(budgetFilters));
+      }
+    }
+  }, [getFilteredHotelData, selectedFilters]);
 
   const onFiltersPress = () => {
     navigation.navigate('FilterModal', {
@@ -72,8 +119,10 @@ const Home = ({ theme }: Props) => {
   };
 
   const getHotelData = useCallback(() => {
+    const dataSrc = selectedFilters?.length ? filteredHotels : hotels;
+
     if (selectedSortBy === SortingMethodValues.STARS_DESC) {
-      return hotels.sort((a: Hotel, b: Hotel) => {
+      return dataSrc.sort((a: Hotel, b: Hotel) => {
         if (a.stars < b.stars) {
           return 1;
         }
@@ -85,7 +134,7 @@ const Home = ({ theme }: Props) => {
     }
 
     if (selectedSortBy === SortingMethodValues.STARS_ASC) {
-      return hotels.sort((a: Hotel, b: Hotel) => {
+      return dataSrc.sort((a: Hotel, b: Hotel) => {
         if (a.stars < b.stars) {
           return -1;
         }
@@ -97,7 +146,7 @@ const Home = ({ theme }: Props) => {
     }
 
     if (selectedSortBy === SortingMethodValues.PRICE_DESC) {
-      return hotels.sort((a: Hotel, b: Hotel) => {
+      return dataSrc.sort((a: Hotel, b: Hotel) => {
         if (a.price < b.price) {
           return 1;
         }
@@ -109,7 +158,7 @@ const Home = ({ theme }: Props) => {
     }
 
     if (selectedSortBy === SortingMethodValues.PRICE_ASC) {
-      return hotels.sort((a: Hotel, b: Hotel) => {
+      return dataSrc.sort((a: Hotel, b: Hotel) => {
         if (a.price < b.price) {
           return -1;
         }
@@ -119,10 +168,18 @@ const Home = ({ theme }: Props) => {
         return 0;
       });
     }
-    return hotels;
-  }, [selectedSortBy, hotels]);
+    return dataSrc;
+  }, [selectedFilters?.length, filteredHotels, hotels, selectedSortBy]);
 
   const content = useMemo(() => {
+    if (loading) {
+      return (
+        <LoaderWrapper>
+          <ActivityIndicator size="large" />
+        </LoaderWrapper>
+      );
+    }
+
     if (!hotels?.length) {
       return null;
     }
@@ -151,7 +208,7 @@ const Home = ({ theme }: Props) => {
         ))}
       </ScrollView>
     );
-  }, [getHotelData, hotels?.length, navigation]);
+  }, [getHotelData, hotels?.length, loading, navigation]);
 
   return (
     <SafeAreaView

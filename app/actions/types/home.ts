@@ -1,1 +1,2 @@
 export const HOME_SET_SORT_BY = 'HOME_SET_SORT_BY';
+export const HOME_SET_FILTERS = 'HOME_SET_FILTERS';
