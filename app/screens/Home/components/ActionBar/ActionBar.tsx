@@ -25,6 +25,14 @@ const ActionsWrapper = styled(View)`
   elevation: 1;
 `;
 
+const ActionButtonWrapper = styled(TouchableOpacity)`
+  flex: 1;
+  flexDirection: row;
+  alignContent: center;
+  alignItems: center;
+  justifyContent: center;
+`;
+
 const ActionText = styled(Paragraph).attrs({
   color: 'darkMid',
 })`
@@ -38,16 +46,7 @@ type ActionButtonProps = {
 };
 
 const ActionButton = ({ icon, label, onPress }: ActionButtonProps) => (
-  <TouchableOpacity
-    onPress={onPress}
-    style={{
-      flex: 1,
-      flexDirection: 'row',
-      alignContent: 'center',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}
-  >
+  <ActionButtonWrapper onPress={onPress}>
     <Icon
       name={icon}
       size={22}
@@ -57,7 +56,7 @@ const ActionButton = ({ icon, label, onPress }: ActionButtonProps) => (
       }}
     />
     <ActionText>{label}</ActionText>
-  </TouchableOpacity>
+  </ActionButtonWrapper>
 );
 
 export const ActionBar = ({ onFiltersPress, onSortersPress }: Props) => {

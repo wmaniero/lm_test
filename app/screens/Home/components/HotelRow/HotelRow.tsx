@@ -1,10 +1,12 @@
 import React from 'react';
 import {
-  Text,
   Image as RNImage,
   TouchableOpacity,
 } from 'react-native';
 import styled from 'ui-lib/style/styledComponents';
+import { withTheme } from 'styled-components';
+import { ITheme } from 'ui-lib/style/styledType';
+import { Paragraph } from 'ui-lib';
 import { Hotel } from 'types/Hotel';
 import { LayoutView } from 'components/LayoutView';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -20,26 +22,19 @@ const Image = styled(RNImage)`
   height: 100%;
 `;
 
-const Title = styled(Text)`
-  fontFamily: oswald;
-  fontWeight: bold;
-  fontSize: 16;
-  color: #152129;
-`;
-const Location = styled(Text)`
+const Location = styled(Paragraph)`
   flex: 1;
-  fontFamily: oswald;
-  fontSize: 16;
-  color: #152129;
-`;
-const Price = styled(Text)`
-  fontFamily: oswald;
-  fontWeight: bold;
-  fontSize: 18;
-  color: #263D4C;
 `;
 
-export const HotelRow = ({ item, onPress }: Props) => (
+const Price = styled(Paragraph)`
+  fontSize: 18;
+`;
+
+export const HotelRow = withTheme(({
+  theme,
+  item,
+  onPress,
+}: Props & { theme?: ITheme }) => (
   <TouchableOpacity
     onPress={onPress}
     style={{
@@ -53,14 +48,17 @@ export const HotelRow = ({ item, onPress }: Props) => (
     }}
   >
     <Image source={{ uri: item.gallery?.[0] }} />
-    <LayoutView flex={1} flexDirection="column">
+    <LayoutView
+      flex={1}
+      flexDirection="column"
+    >
       <LayoutView
         flex={1}
         borderTopRightRadius={10}
         paddingTop={10}
         paddingHorizontal={6}
       >
-        <Title>{item.name}</Title>
+        <Paragraph weight="bold" color={theme.colors.darkMid}>{item.name}</Paragraph>
         <StarRating
           totalStars={5}
           stars={item.stars}
@@ -81,7 +79,7 @@ export const HotelRow = ({ item, onPress }: Props) => (
               paddingHorizontal: 6,
             }}
           />
-          <Location>{`${item.location.city} • ${item.location.address}`}</Location>
+          <Location color={theme.colors.darkMid}>{`${item.location.city} • ${item.location.address}`}</Location>
         </LayoutView>
       </LayoutView>
       <LayoutView
@@ -90,8 +88,8 @@ export const HotelRow = ({ item, onPress }: Props) => (
         paddingRight={10}
         paddingBottom={10}
       >
-        <Price>{`${item.price} ${item.currency}`}</Price>
+        <Price weight="bold" color={theme.colors.darkMid}>{`${item.price} ${item.currency}`}</Price>
       </LayoutView>
     </LayoutView>
   </TouchableOpacity>
-);
+));

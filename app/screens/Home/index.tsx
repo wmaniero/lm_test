@@ -14,7 +14,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { StoreState } from 'store';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { compose } from 'recompose';
 import { withTheme } from 'styled-components';
 import styled from 'ui-lib/style/styledComponents';
 import { ActivityIndicator } from 'ui-lib/components/ActivityIndicator';
@@ -48,7 +47,7 @@ type Props = {
   theme: ITheme;
 }
 
-const Home = ({ theme }: Props) => {
+export const Home = withTheme(({ theme }: Props) => {
   const navigation = useNavigation();
   const selectedSortBy = useSelector((store: StoreState) => store.homeReducer.sortBy);
   const selectedFilters = useSelector((store: StoreState) => store.homeReducer.filters);
@@ -229,7 +228,4 @@ const Home = ({ theme }: Props) => {
       </Container>
     </SafeAreaView>
   );
-};
-
-const ComposedHome: typeof Home = compose(withTheme)(Home);
-export { ComposedHome as Home };
+});

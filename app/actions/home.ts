@@ -2,9 +2,10 @@ import {
   HOME_SET_SORT_BY,
   HOME_SET_FILTERS,
 } from 'actions/types';
+import { SortingMethodValues } from 'screens/Home/components/SorterModal';
 import { FilterItem } from 'types/FilterItem';
 
-export function setSortBy(method) {
+export function setSortBy(method: SortingMethodValues) {
   return {
     type: HOME_SET_SORT_BY,
     method,
